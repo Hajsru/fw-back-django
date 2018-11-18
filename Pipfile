@@ -1,0 +1,22 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "*"
+djangorestframework = "*"
+drf-yasg = "*"
+"psycopg2-binary" = "*"
+djangorestframework-camel-case = "*"
+rest-framework-generic-relations = "*"
+
+[dev-packages]
+pylint = "*"
+pylint-django = "*"
+"flake8" = "*"
+pytest = "*"
+pytest-django = "*"
+
+[requires]
+python_version = "3.7"
