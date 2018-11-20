@@ -4,9 +4,9 @@ from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from api.serializers import CommentSerializer
+from .serializers import CommentSerializer
 
-# Custom схема для генерации документации метода comment
+# Custom OpenAPI Scheme для генерации документации метода comment
 comment_response = openapi.Response('Объект комментария', CommentSerializer)
 comment_schema = {
     'method': 'post',
@@ -28,6 +28,15 @@ class CommentedObjectMixin:
     @swagger_auto_schema(**comment_schema)
     @action(methods=['post'], detail=True)
     def comment(self, request, pk):
+        """
+        DRF Action для комментирования объекта
+        :param request: post запрос
+        :param pk: id комментируемого объекта
+        :return: созданный комментарий
+        :return: 400 + ошибки валидация, если commentText не прошел валидацию
+
+        """
+
         obj = self.get_object()
         serializer = CommentSerializer(data=request.data)
 

@@ -6,11 +6,25 @@ from .models import Speaker, Presentation, Event, Comment
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
-        fields = '__all__'
+        exclude = ('content_type', 'object_id',)
 
 
 class ObjectWithCommentsSerializer(serializers.ModelSerializer):
-    comments = CommentSerializer(many=True, read_only=True)
+    comments = serializers.SerializerMethodField()
+
+    @staticmethod
+    def get_comments(obj):
+        """
+        Метод используется для получения списка комментариев объекта
+        с помощью фильтрации комментариев относящихся к данному объекту
+        :param obj: комментируемый объект
+        :return: список комментариев объекта
+
+        """
+
+        qs = Comment.objects.filter(object_id=obj.id)
+        serializer = CommentSerializer(instance=qs, many=True)
+        return serializer.data
 
 
 class EventSerializer(ObjectWithCommentsSerializer):

@@ -1,6 +1,9 @@
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils.timezone import now
+from django.contrib.contenttypes.fields import GenericForeignKey, \
+    GenericRelation
+from django.contrib.contenttypes.models import ContentType
 
 
 class TimeStampedModel(models.Model):
@@ -12,7 +15,7 @@ class TimeStampedModel(models.Model):
 
 
 class CommentedObjectModel(models.Model):
-    comments = models.ManyToManyField('Comment', verbose_name='Комментарии')
+    comments = GenericRelation('Comment', verbose_name='Комментарии')
 
     class Meta:
         abstract = True
@@ -20,6 +23,10 @@ class CommentedObjectModel(models.Model):
 
 class Comment(TimeStampedModel):
     comment_text = models.TextField(verbose_name='Комментарий')
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE,
+                                     null=True)
+    object_id = models.PositiveIntegerField(null=True)
+    commented_object = GenericForeignKey('content_type', 'object_id')
 
     class Meta:
         verbose_name = 'комментарий'
