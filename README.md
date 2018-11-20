@@ -8,3 +8,9 @@
 * Тесты
 * Контейнеризация
 * Рейтинг и его начисление
+
+## Как запустить
+1) Установить зависимости из Pipenv
+1) Настроить подключение к PostgreSQL в settings.py
+1) Накатить миграции `python manage.py migrate`
+1) Создать суперпользователя `python manage.py createsuperuser`
